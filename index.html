@@ -1,219 +1,168 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8"/>
 <title>OpenGIFT AI</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
 body{min-height:100vh;background:url(https://picsum.photos/id/1043/1920/1080) center/cover fixed;display:flex;align-items:center;justify-content:center;padding:20px}
-.main{width:100%;max-width:720px;height:85vh;background:rgba(255,255,255,0.13);backdrop-filter:blur(20px)saturate(160%);border-radius:20px;border:1px solid rgba(255,255,255,0.25);box-shadow:0 25px 60px rgba(0,0,0,0.25);display:flex;flex-direction:column;overflow:hidden}
-.header{padding:16px 20px;border-bottom:1px solid rgba(255,255,255,0.15);color:#fff;font-size:16px;text-align:center;display:flex;justify-content:space-between;align-items:center}
-.setting-btn{background:rgba(255,255,255,0.2);color:#fff;border:none;padding:6px 10px;border-radius:10px;font-size:12px;cursor:pointer}
-.login{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;border-radius:20px;z-index:10}
-.login-box{background:rgba(255,255,255,0.15);padding:30px 40px;border-radius:18px;border:1px solid rgba(255,255,255,0.3);text-align:center;color:#fff}
-.login-box h2{margin-bottom:20px}
-.login-box input{width:100%;padding:12px 16px;border-radius:12px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.1);color:#fff;font-size:16px;outline:0;margin-bottom:16px;text-align:center}
-.login-box button{padding:10px 24px;border-radius:12px;background:#007aff;color:#fff;border:none;cursor:pointer}
-.login-box .tip{margin-top:12px;color:#ff6666;height:20px}
+.main{width:100%;max-width:720px;height:88vh;background:rgba(255,255,255,0.13);backdrop-filter:blur(22px)saturate(160%);border-radius:20px;border:1px solid rgba(255,255,255,0.25);box-shadow:0 25px 60px rgba(0,0,0,0.25);display:flex;flex-direction:column;overflow:hidden}
+.header{padding:16px 20px;border-bottom:1px solid rgba(255,255,255,0.15);color:#fff;font-size:16px;text-align:center}
 .chat{flex:1;padding:20px;display:flex;flex-direction:column;gap:14px;overflow-y:auto;color:#fff}
 .chat::-webkit-scrollbar{width:6px}
 .chat::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.25);border-radius:3px}
 .msg{max-width:78%;padding:10px 14px;border-radius:16px;line-height:1.5}
 .user-msg{align-self:flex-end;background:rgba(0,122,255,0.75);color:#fff;border-bottom-right-radius:8px}
 .bot-msg{align-self:flex-start;background:rgba(255,255,255,0.2);color:#fff;border-bottom-left-radius:8px}
-.img-box{align-self:flex-start;margin:5px 0;max-width:90%}
-.img-box img{max-width:100%;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.2)}
+.img-box{align-self:flex-start;max-width:90%}
+.img-box img{max-width:100%;border-radius:12px}
 .input-bar{padding:14px 20px;border-top:1px solid rgba(255,255,255,0.15);display:flex;gap:10px}
 .input-bar input{flex:1;padding:12px 16px;border-radius:30px;border:1px solid rgba(255,255,255,0.25);background:rgba(255,255,255,0.1);color:#fff;outline:0}
 .input-bar input::placeholder{color:rgba(255,255,255,0.5)}
 .input-bar button{padding:0 22px;border-radius:30px;background:#007aff;color:#fff;border:none;cursor:pointer}
-
-.panel{position:absolute;top:0;right:0;width:320px;height:100%;background:rgba(255,255,255,0.1);backdrop-filter:blur(20px);border-left:1px solid rgba(255,255,255,0.2);padding:20px;display:none;color:#fff;z-index:20}
-.panel h3{margin-bottom:16px}
-.panel .row{margin-bottom:12px}
-.panel label{display:block;font-size:14px;margin-bottom:4px}
-.panel input,.panel select{width:100%;padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.3);color:#fff;outline:0}
-.close-panel{margin-top:20px;padding:8px 16px;background:#007aff;color:#fff;border:none;border-radius:10px;width:100%;cursor:pointer}
+.login-mask{position:absolute;inset:0;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;border-radius:20px}
+.login-box{background:rgba(255,255,255,0.15);padding:30px 40px;border-radius:18px;border:1px solid rgba(255,255,255,0.3);text-align:center;color:#fff;width:320px}
+.login-box input{width:100%;padding:12px 16px;border-radius:12px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.1);color:#fff;font-size:16px;outline:0;margin:16px 0;text-align:center}
+.login-box button{padding:10px 24px;border-radius:12px;background:#007aff;color:#fff;border:none;cursor:pointer;width:100%}
+.login-box .tip{margin-top:12px;color:#ff6666;font-size:14px}
 </style>
 </head>
 <body>
 <div class="main">
-  <div class="header">
-    <div>OpenGIFT AI</div>
-    <button class="setting-btn" onclick="togglePanel()">⚙ 模型微调</button>
-  </div>
+  <div class="header">OpenGIFT AI</div>
   <div class="chat" id="chat"></div>
   <div class="input-bar">
-    <input id="msg" placeholder="输入消息，/img 生成图片..." disabled/>
+    <input id="msg" placeholder="聊天 / 输入 /img 描述 生成图片" disabled>
     <button onclick="send()" disabled>发送</button>
   </div>
 </div>
 
-<div class="login" id="login">
+<div class="login-mask" id="mask">
   <div class="login-box">
-    <h2>OpenGIFT 验证</h2>
-    <input id="pwd" type="password" placeholder="输入密码" autocomplete="off"/>
-    <button onclick="checkPwd()">确认</button>
+    <h3>安全验证</h3>
+    <input id="pwd" type="password" placeholder="输入密码">
+    <button onclick="check()">确认</button>
     <div class="tip" id="err"></div>
   </div>
 </div>
 
-<div class="panel" id="panel">
-  <h3>模型微调</h3>
-  <div class="row">
-    <label>模型名称</label>
-    <select id="model">
-      <option value="Qwen/Qwen3-8B">Qwen3-8B</option>
-      <option value="deepseek-ai/DeepSeek-R1">DeepSeek-R1</option>
-      <option value="THUDM/chatglm3-6b">ChatGLM3-6B</option>
-    </select>
-  </div>
-  <div class="row">
-    <label>温度 (0~2) 创造力</label>
-    <input type="number" id="temp" value="0.7" min="0" max="2" step="0.1">
-  </div>
-  <div class="row">
-    <label>Top_p (0~1)</label>
-    <input type="number" id="top_p" value="0.9" min="0" max="1" step="0.05">
-  </div>
-  <div class="row">
-    <label>最大生成长度</label>
-    <input type="number" id="max" value="2048" min="64" max="8192">
-  </div>
-  <button class="close-panel" onclick="togglePanel()">关闭</button>
-</div>
-
 <script>
 const API_KEY = "sk-notxpaduknxfetcjomcskyuxsitcbxxojnousrcunoipjqxt";
-const API_URL = "https://api.siliconflow.cn/v1/chat/completions";
-const IMG_URL = "https://api.siliconflow.cn/v1/images/generations";
-const CORRECT = "205807";
-let lockedUntil = 0;
-let chatDom = document.getElementById("chat");
-let msgInput = document.getElementById("msg");
+const API_CHAT = "https://api.siliconflow.cn/v1/chat/completions";
+const API_IMG  = "https://api.siliconflow.cn/v1/images/generations";
+const PWD = "205807";
+let lockUntil = 0;
 
-function togglePanel(){
-  let p = document.getElementById("panel");
-  p.style.display = p.style.display=="block" ? "none" : "block";
-}
+const chat = document.getElementById("chat");
+const msg = document.getElementById("msg");
+const btn = document.querySelector(".input-bar button");
 
-async function send(){
-  let txt = msgInput.value.trim();
-  if(!txt)return;
-  addText(txt, "user");
-  msgInput.value = "";
-
-  if(txt.startsWith("/img ")){
-    let prompt = txt.slice(5).trim();
-    await genImage(prompt);
-    return;
-  }
-
-  let aiMsg = addText("", "bot");
-  aiMsg.textContent = "思考中...";
-
-  let model = document.getElementById("model").value;
-  let temp = parseFloat(document.getElementById("temp").value);
-  let top_p = parseFloat(document.getElementById("top_p").value);
-  let max_tokens = parseInt(document.getElementById("max").value);
-
-  try{
-    let r = await fetch(API_URL,{
-      method:"POST",
-      headers:{"Authorization":"Bearer "+API_KEY,"Content-Type":"application/json"},
-      body:JSON.stringify({
-        model:model,
-        messages:[{role:"user",content:txt}],
-        temperature:temp,
-        top_p:top_p,
-        max_tokens:max_tokens,
-        stream:true
-      })
-    });
-    const reader = r.body.getReader();
-    const decoder = new TextDecoder();
-    aiMsg.textContent = "";
-
-    while(true){
-      const {done, value} = await reader.read();
-      if(done) break;
-      const chunk = decoder.decode(value);
-      const lines = chunk.split("\n").filter(i=>i.trim());
-      for(const line of lines){
-        if(line.startsWith("data: ")){
-          const data = line.slice(6);
-          if(data === "[DONE]") break;
-          try{
-            const j = JSON.parse(data);
-            const c = j.choices[0].delta.content;
-            if(c) aiMsg.textContent += c;
-            chatDom.scrollTop = chatDom.scrollHeight;
-          }catch(e){}
-        }
-      }
-    }
-  }catch(e){
-    aiMsg.textContent = "请求失败："+e.message;
-  }
-}
-
-async function genImage(prompt){
-  addText("正在生成图片...", "bot");
-  try{
-    let r = await fetch(IMG_URL,{
-      method:"POST",
-      headers:{"Authorization":"Bearer "+API_KEY,"Content-Type":"application/json"},
-      body:JSON.stringify({
-        model: "stabilityai/stable-diffusion-3-5-large",
-        prompt: prompt,
-        n: 1,
-        size: "1024x1024"
-      })
-    });
-    let d = await r.json();
-    let url = d.data[0].url;
-    let img = document.createElement("div");
-    img.className = "img-box";
-    let i = document.createElement("img");
-    i.src = url;
-    img.appendChild(i);
-    chatDom.appendChild(img);
-  }catch(e){
-    addText("生成失败："+e.message, "bot");
-  }
-  chatDom.scrollTop = chatDom.scrollHeight;
-}
-
-function addText(text, role){
-  let d = document.createElement("div");
-  d.className = role === "user" ? "msg user-msg" : "msg bot-msg";
-  d.textContent = text;
-  chatDom.appendChild(d);
-  chatDom.scrollTop = chatDom.scrollHeight;
-  return d;
-}
-
-function checkPwd(){
+function check(){
   let now = Date.now()/1000;
-  if(now < lockedUntil){
-    let t = Math.ceil(lockedUntil - now);
+  if(now < lockUntil){
+    let t = Math.ceil(lockUntil-now);
     document.getElementById("err").textContent = t+"秒后重试";
     return;
   }
-  let p = document.getElementById("pwd").value;
-  if(p === CORRECT){
-    login.style.display = "none";
-    msgInput.disabled = false;
-    document.querySelector(".input-bar button").disabled = false;
-    msgInput.focus();
+  if(document.getElementById("pwd").value === PWD){
+    mask.style.display = "none";
+    msg.disabled = false;
+    btn.disabled = false;
+    msg.focus();
   }else{
-    lockedUntil = now + 60;
+    lockUntil = now+60;
     err.textContent = "密码错误，锁定1分钟";
   }
 }
 
-msgInput.addEventListener("keydown", e=>{if(e.key==="Enter")send()});
+async function send(){
+  let text = msg.value.trim();
+  if(!text) return;
+  add(text, "user");
+  msg.value = "";
+
+  if(text.startsWith("/img ")){
+    add("生成图片中...", "bot");
+    try{
+      let res = await fetch(API_IMG,{
+        method:"POST",
+        headers:{
+          "Authorization":"Bearer "+API_KEY,
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+          prompt:text.slice(5),
+          n:1,
+          size:"1024x1024"
+        })
+      });
+      let data = await res.json();
+      let imgBox = document.createElement("div");
+      imgBox.className = "img-box";
+      let img = document.createElement("img");
+      img.src = data.data[0].url;
+      imgBox.appendChild(img);
+      chat.appendChild(imgBox);
+    }catch(e){
+      add("图片生成失败", "bot");
+    }
+    chat.scrollTop = chat.scrollHeight;
+    return;
+  }
+
+  let m = add("思考中...", "bot");
+  try{
+    let res = await fetch(API_CHAT,{
+      method:"POST",
+      headers:{
+        "Authorization":"Bearer "+API_KEY,
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({
+        model: "qwen/Qwen3-8B", // 固定模型
+        messages:[{role:"user",content:text}],
+        temperature:0.7,
+        stream:true
+      })
+    });
+    const reader = res.body.getReader();
+    const dec = new TextDecoder();
+    m.textContent = "";
+
+    while(true){
+      let {done, value} = await reader.read();
+      if(done) break;
+      let lines = dec.decode(value).split("\n").filter(i=>i.trim());
+      for(let line of lines){
+        if(!line.startsWith("data: ")) continue;
+        let d = line.slice(6);
+        if(d === "[DONE]") break;
+        try{
+          let j = JSON.parse(d);
+          let c = j.choices[0].delta.content;
+          if(c) m.textContent += c;
+          chat.scrollTop = chat.scrollHeight;
+        }catch(e){}
+      }
+    }
+  }catch(e){
+    m.textContent = "请求失败";
+  }
+}
+
+function add(text, role){
+  let div = document.createElement("div");
+  div.className = role === "user" ? "msg user-msg" : "msg bot-msg";
+  div.textContent = text;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+  return div;
+}
+
+msg.addEventListener("keydown", e=>{
+  if(e.key === "Enter") send();
+});
 </script>
 </body>
 </html>
